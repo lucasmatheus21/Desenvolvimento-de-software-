@@ -1,1 +1,41 @@
-# Desenvolvimento-de-software-
+
+import google.generativeai as genai
+
+# Substitua pela sua chave de API
+GOOGLE_API_KEY = "AIzaSyCc29rVJdsrPC1MLRQrASdmRyxQ_B3ZHds"
+
+# Configure a chave da API
+genai.configure(api_key=GOOGLE_API_KEY)
+
+# Tentar com o modelo 'models/gemini-2.0-flash'
+MODEL_NAME = 'models/gemini-2.0-flash'
+model = genai.GenerativeModel(MODEL_NAME)
+
+def obter_resposta_do_mestre(prompt):
+    """Envia um prompt para o Gemini e retorna a resposta."""
+    try:
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        return f"Ocorreu um erro ao gerar a resposta: {e}"
+
+if __name__ == "__main__":
+    print("Bem-vindo ao Mestre Gemini!")
+
+    # Defina o contexto da aventura
+    contexto_inicial = input("Descreva o cenário inicial da aventura (local, época, situação geral): ")
+    prompt_contexto = f"Contexto da aventura: {contexto_inicial}. Descreva a cena inicial para os jogadores, destacando detalhes importantes e atmosferas."
+    resposta_contexto = obter_resposta_do_mestre(prompt_contexto)
+    print("\nCena Inicial:\n", resposta_contexto)
+
+    while True:
+        acao_do_jogador = input("\nO que seus personagens fazem? (ou 'sair' para encerrar): ")
+        if acao_do_jogador.lower() == 'sair':
+            break
+
+        prompt_acao = f"Contexto da aventura: {contexto_inicial}. A ação dos jogadores é: {acao_do_jogador}. Como mestre, descreva o resultado dessa ação e as próximas possibilidades."
+        resposta_acao = obter_resposta_do_mestre(prompt_acao)
+        print("\nResposta do Mestre Gemini:\n", resposta_acao)
+
+    print("\nAventura encerrada!")
+    
